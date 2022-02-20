@@ -57,13 +57,13 @@ tasks:
       - podman inspect --type volume {{.VOLUME}}
   
   service:
-    desc: Runs nomad
+    desc: Runs service
     deps:
       - build
       - network
       - volume
     cmds:
-      - podman run -it --rm --name {{.CONTAINER}} --network nomadic --volume {{.VOLUME}}:/mnt/{{.VOLUME}} {{.NAME}}:{{.VERSION}} /bin/bash
+      - podman run -it --rm --name {{.CONTAINER}} --network {{.NETWORK}} --volume {{.VOLUME}}:/mnt/{{.VOLUME}} {{.NAME}}:{{.VERSION}} /bin/bash
   
   clean:
     desc: Removes image
@@ -72,14 +72,14 @@ tasks:
     status:
       - if [ "{{.INSPECT_IMAGE}}" == "" ]; then exit 0; else exit 1; fi
   
-  clean-vol:
+  clean-volume:
     desc: Removes volume
     cmds:
       - podman volume rm {{.VOLUME}}
     status:
       - if [ "{{.INSPECT_VOLUME}}" == "" ]; then exit 0; else exit 1; fi
 
-  clean-net:
+  clean-network:
     desc: Removes network
     cmds:
       - podman network rm {{.VOLUME}}
@@ -87,8 +87,8 @@ tasks:
       - if [ "{{.INSPECT_NETWORK}}" == "" ]; then exit 0; else exit 1; fi
   
   clobber:
-    desc: Clobbers service
+    desc: Removes image, volume, and network
     deps:
       - clean
-      - clean-vol
-      - clean-net
+      - clean-volume
+      - clean-network
