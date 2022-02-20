@@ -1,5 +1,3 @@
-# nomadic
+# nomadimg
 
-Nomad in containers
-
-Inspired by minikube
+Nomad container image
